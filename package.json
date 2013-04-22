@@ -3,15 +3,19 @@
   "version": "0.0.0PR2",
   "description": "Subcommand for mojito-cli to create mojito scaffolding/boilerplate.",
   "dependencies": {
-    "handlebars": "~1.0.10",
-    "npmlog": "0.0.2"
+    "mkdirp": "~0.3.5",
+    "npmlog": "0.0.2",
+    "scanfs": "0.0.2",
+    "through": "~2.3.1"
   },
   "devDependencies": {
     "tap": "~0.4.1"
   },
   "scripts": {
     "test": "node tests",
-    "cover": "istanbul cover --dir artifacts/coverage -- tests",
+    "lint": "jshint {.,commands,lib}/*.js && echo ok",
+    "clean": "git clean -dfx {.,tests}/artifacts",
+    "cover": "istanbul cover --dir artifacts/coverage tests",
     "bumppatch": "npm version patch -m \"tag v%s (based on $(git describe))\""
   },
   "repository": {
@@ -29,10 +33,6 @@
   ],
   "license": "BSD",
   "readmeFilename": "README.md",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "keywords": [
     "mojito",
     "boilerplate",
