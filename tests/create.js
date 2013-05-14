@@ -28,7 +28,7 @@ test('[func] create from fixtures/symlinked', function(t) {
         t.equal(pathname.slice(-expected.length), expected, '.placeholder ignored');
     });
 
-    scan.on('done', function(count) {
+    scan.on('done', function(err, count) {
         t.equal(count, expected_count, 'fs node count');
     });
 });
@@ -46,6 +46,24 @@ test('create nonesuch', function(t) {
     }
 
     scan = fn(from, to, {}, cb);
+    scan.on('error', function(err, pathname, stat) {
+        t.equal(pathname, from);
+        t.equal(err.code, 'ENOENT');
+        t.equal(err.errno, 34);
+        t.same(err.message, "ENOENT, stat 'oh hey, no. sorry.'");
+        t.equal(pathname, err.path);
+        t.false(stat);
+    });
+});
+
+test('create nonesuch no cb', function(t) {
+    var from = 'oh hey, no. sorry.',
+        to = resolve(__dirname, 'artifacts'),
+        scan;
+
+    t.plan(6);
+
+    scan = fn(from, to, {}, null);
     scan.on('error', function(err, pathname, stat) {
         t.equal(pathname, from);
         t.equal(err.code, 'ENOENT');
